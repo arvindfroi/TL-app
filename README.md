@@ -7,6 +7,10 @@ A private, invite-only iPhone app for one friend group of 9. It does three thing
 ## 🤖 Working on this with an AI assistant?
 Point it at **[`AGENTS.md`](AGENTS.md)** — a self-contained guide that explains the project, where the truth lives, how work is tracked, and the rules to follow. Humans should read **[`CONTRIBUTING.md`](CONTRIBUTING.md)**.
 
+## Principles (whole project)
+- **Security & privacy by default** — closed group, Sign in with Apple, minimal data, encrypted.
+- **No ads, ever** — no ad SDKs, no tracking-for-ads, no sponsored content.
+
 ## The crew
 Arvind · Ruben · Fridrik · Morten · Adrian · Fredrik · Emil · Lars · Eivind
 
@@ -36,6 +40,7 @@ Swift / SwiftUI · Sign in with Apple · CloudKit (+ CKShare) · CloudKit subscr
 ## Docs
 - [`AGENTS.md`](AGENTS.md) — AI assistant & contributor guide (start here)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — human contributor workflow
+- [`DESIGN.md`](DESIGN.md) — design language (draft) + decisions checklist
 - [`STATUS.md`](STATUS.md) — auto-generated progress
 - [`docs/MVP-and-Roadmap.md`](docs/MVP-and-Roadmap.md) — full MVP, hosting decision, roadmap, risks
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — the CloudKit + R2 architecture in brief

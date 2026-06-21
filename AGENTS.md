@@ -13,6 +13,7 @@ This file follows the [AGENTS.md](https://agents.md) convention and is auto-dete
 - **Platform:** iOS-only (Swift / SwiftUI). Deep iPhone integration is a goal (Widgets, Live Activities, Siri, Apple Intelligence).
 - **Backend:** Apple **CloudKit** (app data) + **Cloudflare R2** (media). No server we run. $0 hosting; only cost is the Apple Developer membership (~$99/yr).
 - **Status:** **planning / pre-development.** No app code yet — this repo currently holds product + architecture docs and the issue backlog. Code arrives with Phase 0.
+- **Non-negotiables (every phase, every PR):** **security & privacy by default**, and **no ads — ever**. See [§8 Guardrails](#8-guardrails-do--dont).
 
 ## 2. Sources of truth
 
@@ -25,6 +26,7 @@ Always check these for current reality before acting:
 | Why the architecture is the way it is | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and §4 of the roadmap |
 | The original feature ideas | [`docs/brainstorm.md`](docs/brainstorm.md) |
 | The feature backlog (master list) | [`docs/BACKLOG.md`](docs/BACKLOG.md) (mirrored as Issues) |
+| The design language (type, color, motion) | [`DESIGN.md`](DESIGN.md) (currently a draft/scaffold) |
 | Who's doing what / activity | GitHub **Insights → Contributors / Pulse**, issue **assignees** |
 
 **Rule for AI assistants:** the roadmap and backlog docs describe *intent*; the **Issues** describe *current work*; **STATUS.md** describes *progress*. When these disagree, Issues + STATUS.md win.
@@ -35,6 +37,7 @@ Always check these for current reality before acting:
 .
 ├── AGENTS.md            ← you are here (AI + contributor guide)
 ├── CONTRIBUTING.md      human contributor workflow
+├── DESIGN.md           design language (draft) + decisions checklist
 ├── README.md           project overview
 ├── STATUS.md           AUTO-GENERATED progress (do not hand-edit)
 ├── .github/workflows/
@@ -78,6 +81,13 @@ To find the next thing to do: open Issues, filter by the lowest open phase, pick
 5. Update any checklist items in the issue as you go.
 
 ## 8. Guardrails (do / don't)
+
+**Standing principles — apply to every feature and PR, forever:**
+
+- **Security & privacy by default.** Closed group (CKShare membership), Sign in with Apple, collect the minimum data, encrypted in transit + at rest, server-side permission checks (not just UI). Never weaken these for convenience. No secrets in the repo.
+- **No ads, ever.** No ad SDKs, no ad slots, no tracking-for-advertising, no sponsored content. This is a friends-only app and stays ad-free by design.
+
+Plus:
 
 - **Do** keep the app **iOS-only** and distribute **TestFlight-only** for now (avoids App Store user-generated-content review).
 - **Do** keep vlog media **ephemeral** (expiring) and stored on **R2**, not CloudKit.
