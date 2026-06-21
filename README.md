@@ -4,6 +4,9 @@ A private, invite-only iPhone app for one friend group of 9. It does three thing
 
 > Status: **planning / pre-development.** This repo currently holds the product and architecture docs. Code comes next.
 
+## 🤖 Working on this with an AI assistant?
+Point it at **[`AGENTS.md`](AGENTS.md)** — a self-contained guide that explains the project, where the truth lives, how work is tracked, and the rules to follow. Humans should read **[`CONTRIBUTING.md`](CONTRIBUTING.md)**.
+
 ## The crew
 Arvind · Ruben · Fridrik · Morten · Adrian · Fredrik · Emil · Lars · Eivind
 
@@ -17,6 +20,9 @@ Group chat with read receipts · Events + RSVP · Polls · "Hjemme i Sandnes" ca
 
 See the full plan in [`docs/MVP-and-Roadmap.md`](docs/MVP-and-Roadmap.md).
 
+## Progress
+Live progress by phase is in **[`STATUS.md`](STATUS.md)** (auto-generated from Issues). Per-person activity is under the repo's **Insights → Contributors / Pulse**.
+
 ## Roadmap at a glance
 - **Phase 0** — Foundations (Apple Developer, CloudKit container + shared zone, app scaffold)
 - **Phase 1** — MVP core loop
@@ -28,6 +34,9 @@ See the full plan in [`docs/MVP-and-Roadmap.md`](docs/MVP-and-Roadmap.md).
 Swift / SwiftUI · Sign in with Apple · CloudKit (+ CKShare) · CloudKit subscriptions for push · Cloudflare R2 for media · free serverless cron (Cloudflare Workers / Val Town) · Apple Intelligence / Foundation Models (opportunistic).
 
 ## Docs
+- [`AGENTS.md`](AGENTS.md) — AI assistant & contributor guide (start here)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — human contributor workflow
+- [`STATUS.md`](STATUS.md) — auto-generated progress
 - [`docs/MVP-and-Roadmap.md`](docs/MVP-and-Roadmap.md) — full MVP, hosting decision, roadmap, risks
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — the CloudKit + R2 architecture in brief
 - [`docs/BACKLOG.md`](docs/BACKLOG.md) — feature backlog (seed for GitHub Issues)
