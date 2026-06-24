@@ -55,6 +55,18 @@
 - [ ] TL ferien 2030: shared savings goal/tracker (no money held)
 - [ ] "TL polymarket": points-only first (legal note in roadmap §6)
 
+## AI assistance (cross-cutting; mostly Phase 5 — see [`AI-READINESS.md`](AI-READINESS.md))
+**Pull into Phases 1–3 (cheap, avoids retrofit):**
+- [ ] Schema-first: published, versioned schemas for every customization document (layout/theme/rule/config)
+- [ ] **Capability manifest** (component registry + data sources + trigger/condition/action catalog) with stable IDs, semantic names, doc-strings, structured validation errors
+- [ ] One programmatic create/edit/**validate** API the in-app editor uses (so an AI client reuses it)
+- [ ] Wrap core actions as **App Intents** as they ship (also gives Siri/Shortcuts/widgets)
+
+**Later (Phase 5+):**
+- [ ] **Assistant-provider** interface + on-device **Apple Foundation Models** (config/script help, "why didn't my rule fire", theme suggestions)
+- [ ] **External AI connector(s)** with Guideline **5.1.2(i)** in-app consent + disclosure (off by default)
+- [ ] **Siri / Apple Intelligence** assistant-schema adoption + Spotlight entities + View Annotations
+
 ## Open decisions
 - [ ] Customization editor depth for v1 (drag-drop vs. section toggles before raw editing)
 - [ ] Which triggers/actions ship first in the rules engine
@@ -62,3 +74,4 @@
 - [ ] Confirm "friend group" size assumption (≤ ~50) for CloudKit quota economics
 - [ ] Moderation backstop visibility vs. the private-zone privacy promise
 - [ ] Vlog lifespan + mode (one random person/day vs everyone/day)
+- [ ] AI connectors: on-device only first, or external opt-in too? Which assistant actions first?

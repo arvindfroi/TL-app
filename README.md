@@ -15,7 +15,7 @@ Arvind · Ruben · Fridrik · Morten · Adrian · Fredrik · Emil · Lars · Eiv
 - **Multi-tenant:** any friend group can create a group, invite members, assign **admins**, and customize.
 - **Deeply customizable:** editable **layouts** (SDUI) + **theme tokens** + a **rules/automation engine** — "advanced settings" for power users, friendly editors for everyone.
 - **$0-leaning hosting:** Apple **CloudKit** (one CKShare zone per group) + **Cloudflare R2** for media. Cost stays near-zero because it rides each user's iCloud quota — which is what keeps it **ad-free** as a public app.
-- **Data, not code:** customization is declarative data interpreted by engines in the binary — App Store **2.5.2** safe (and deliberately not the HTML5/JS mini-app route, Guideline 4.7).
+- **Data, not code:** customization is declarative data interpreted by engines in the binary — App Store **2.5.2** safe (and deliberately not the HTML5/JS mini-app route, Guideline 4.7). This also makes it **AI-ready** — see [`docs/AI-READINESS.md`](docs/AI-READINESS.md).
 
 ## Core jobs (ship as the default template)
 Plan hangouts · group chat · run the yearly **Trivselslekene**. These become the default, restylable template every group starts from.
@@ -26,10 +26,10 @@ Plan hangouts · group chat · run the yearly **Trivselslekene**. These become t
 - **Phase 2** — SDUI **layout engine** + friendly editor (groups change layouts, not just styles)
 - **Phase 3** — **Rules / automation engine** ("advanced settings")
 - **Phase 4** — Public release: UGC moderation (Guideline 1.2) + **template gallery**
-- **Phase 5** — Trivselslekene, gamification, iOS extras, money (with care) as editable modules
+- **Phase 5** — Trivselslekene, gamification, iOS extras, **AI assistance**, money (with care) as editable modules
 
 ## Tech stack
-Swift / SwiftUI · Sign in with Apple · CloudKit (CKShare zone per group) + app-level RBAC · CloudKit subscriptions for push · Cloudflare R2 for media · free serverless cron (Workers / Val Town) for scheduled rules · Apple Intelligence / Foundation Models (opportunistic). *Cross-platform later: a second renderer over the same documents via Skip, or Firebase Spark.*
+Swift / SwiftUI · Sign in with Apple · CloudKit (CKShare zone per group) + app-level RBAC · CloudKit subscriptions for push · Cloudflare R2 for media · free serverless cron (Workers / Val Town) for scheduled rules · Apple Intelligence / Foundation Models + App Intents (opportunistic). *Cross-platform later: a second renderer over the same documents via Skip, or Firebase Spark.*
 
 ## Docs
 - [`docs/PIVOT.md`](docs/PIVOT.md) — **start here:** the pivot plan (scope, new architecture, risks, roadmap, migration)
@@ -37,6 +37,7 @@ Swift / SwiftUI · Sign in with Apple · CloudKit (CKShare zone per group) + app
 - [`docs/SDUI-SPEC.md`](docs/SDUI-SPEC.md) — the customizable layout engine
 - [`docs/RULES-SPEC.md`](docs/RULES-SPEC.md) — the rules / automation engine
 - [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) — how customization stays **slim, fast, smooth** (budgets + rules)
+- [`docs/AI-READINESS.md`](docs/AI-READINESS.md) — design so **AI can help configure/script** the app (on-device first; App Intents/Siri; App Store limits)
 - [`docs/EXECUTION-PLAN.md`](docs/EXECUTION-PLAN.md) — spikes, critical path, Definition of Ready/Done, CI
 - [`docs/DECISIONS.md`](docs/DECISIONS.md) — architecture decision log (the *why*, newest first)
 - [`docs/MVP-and-Roadmap.md`](docs/MVP-and-Roadmap.md) — full roadmap, hosting, risks

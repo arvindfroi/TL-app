@@ -2,6 +2,11 @@
 
 > Short, append-only record of the decisions that shape the build, so collaborators see the *why* without re-reading every doc. Newest first. Each entry: decision · why · consequence.
 
+## ADR-009 — AI-ready by construction (2026-06)
+**Decision:** Customization documents (layouts/themes/rules/config) are the AI's API; an AI assistant is just another client of the validated propose→preview→approve pipeline. On-device Apple Foundation Models are the default; external AI is opt-in with consent; core actions are exposed as App Intents. See [`AI-READINESS.md`](AI-READINESS.md).
+**Why:** The data-not-code model already makes the content AI-legible; baking in schemas + a capability manifest + App Intents now avoids a costly retrofit later.
+**Consequence:** Two cheap obligations pulled into Phases 1–3 (schema-first edit API; wrap actions as App Intents). AI output is re-validated like any document; external AI requires Guideline 5.1.2(i) in-app consent; nothing executes as code (2.5.2).
+
 ## ADR-008 — Performance is a gate, not a phase (2026-06)
 **Decision:** Every PR meets the budgets in [`PERFORMANCE.md`](PERFORMANCE.md); customization compiles once into typed Swift and the hot path is plain SwiftUI.
 **Why:** Deep customization is the main jank/bloat risk; "slim, fast, smooth" only holds if it's enforced continuously.

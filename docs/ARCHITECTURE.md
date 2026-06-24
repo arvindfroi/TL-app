@@ -19,7 +19,7 @@
 | 4. Domain data | Messages, events, RSVPs, polls, availability, points; media *metadata* | **CloudKit**; media files on **Cloudflare R2** |
 | 5. Customization store | Per-group theme tokens, layout documents, rule definitions (versioned, with fallback) | **CloudKit** (in the group zone) |
 | 6. Engines (in the binary) | **SDUI renderer** (data → native SwiftUI) and **Rules evaluator** (declarative automation) | Swift interpreters; only *data* is downloaded |
-| 7. Experience & integration | Default app, the customization **editor** (friendly + advanced), **template gallery**, Apple integration | SwiftUI, Widgets, Live Activities, Siri |
+| 7. Experience & integration | Default app, the customization **editor** (friendly + advanced), **template gallery**, **AI assistant** (another client of the editor's validated API), Apple integration | SwiftUI, Widgets, Live Activities, **App Intents/Siri**, on-device Foundation Models |
 
 ## Why CloudKit still fits a multi-tenant app
 A user can **participate in many CKShares at once**, so "each group is its own shared zone" scales to many groups per person without a backend. Crucially, CloudKit storage/traffic sits largely in **each user's own iCloud quota**, so per-tenant cost stays near-zero as the number of groups grows — this is what keeps a public, **ad-free** app sustainable. CKShare gives *access* (in/out of a zone); **roles within a group are an app-level concept** (layer 3) because CKShare only models participant read/write, not admin/moderator semantics.
@@ -45,7 +45,7 @@ A user can **participate in many CKShares at once**, so "each group is its own s
 - **Backups:** periodic CloudKit export to Drive.
 
 ## New obligations from going public (multi-tenant)
-A public release pulls in App Store **Guideline 1.2** (UGC): EULA, in-app **report/block**, moderation/holding of flagged content, and **age-gating (1.2.1)**. Group **admins** are first-line moderators (powers from the RBAC layer); we provide the tooling and a backstop reporting path. Customization must never let a layout/rule cross the zone boundary or escalate privileges — the defenses are the CKShare wall, the sandboxed engines, and validate-and-degrade. See [`PIVOT.md`](PIVOT.md) §6.
+A public release pulls in App Store **Guideline 1.2** (UGC): EULA, in-app **report/block**, moderation/holding of flagged content, and **age-gating (1.2.1)**. Group **admins** are first-line moderators (powers from the RBAC layer); we provide the tooling and a backstop reporting path. Customization must never let a layout/rule cross the zone boundary or escalate privileges — the defenses are the CKShare wall, the sandboxed engines, and validate-and-degrade. See [`PIVOT.md`](PIVOT.md) §6. AI assistance follows the same rule — it proposes documents the engines re-validate, prefers on-device models, and gates external AI behind Guideline 5.1.2(i) consent; see [`AI-READINESS.md`](AI-READINESS.md).
 
 ## Cross-platform fallback (not active)
 If Android is ever needed: build a second **renderer/evaluator over the same documents** (via **Skip**), or fall back to **Firebase (Spark, free)** for a shared backend. Avoid Supabase (free projects pause when idle). Not active while iOS-only.
