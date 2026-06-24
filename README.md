@@ -1,49 +1,36 @@
 # Trivselslederne (TL) app — "WAD?FC"
 
-A **customizable** iPhone app for organizing friend groups and hosting events. Each group makes it their own — their **layouts, design, and automation rules**, not just colors. Our crew (WAD?FC) is the first group and design partner.
+A **local-first, deeply customizable space for a friend group** — less an app you configure, more a clubhouse you and your friends keep making your own. Plan hangouts, chat, and run the yearly **Trivselslekene**. Our crew (WAD?FC) is the first group.
 
-> **Status: planning / pre-development — pivoting (June 2026).** This repo holds product + architecture docs. We are mid-pivot from "one private app for nine friends" to "a platform any friend group can adopt and reshape." Read [`docs/PIVOT.md`](docs/PIVOT.md) first.
+> **Status: idea / pre-development (June 2026).** No app code yet — this repo is the thinking. The direction has evolved from "a customizable multi-tenant app" to a **local-first, single-model, malleable "group OS"**. **Read [`docs/VISION.md`](docs/VISION.md) first**, then the [`docs/`](docs/) index.
 
-## The pivot in one line
-From a fixed app for one hardcoded group → **a multi-tenant app with admins, invites, and deep per-group customization** (user-editable layouts via a server-driven-UI engine, plus a sandboxed rules/automation engine for power users). Still **Swift/SwiftUI**, still **iOS-only for now**, still **ad-free and privacy-first**.
+## What we're building (the three pillars)
+
+| Pillar | Feels like | Free on |
+|---|---|---|
+| **Customizable UI** — themes, layouts, **motion/animation**, icons, fonts; bring-your-own assets; import/export designs | **Cocoon Shell** (theme builder + live preview + asset packs + shareable bundles) | CloudKit (docs) + R2 (assets) |
+| **Rules / automation** — trigger → condition → action, friendly builder + power-user scripts | **Minecraft command blocks** | CloudKit + free cron |
+| **Real-time chat** — instant, offline-proof, ephemeral media | **Snapchat** | CloudKit push + R2 |
+
+All customization is **declarative data, never code** — which keeps it App-Store-safe (Guideline 2.5.2), fast, AI-readable, and portable. It's **React-like components + CSS-like styling**, rendered natively (see [`docs/TECH-STACK.md`](docs/TECH-STACK.md)).
 
 ## The crew (first group)
 Arvind · Ruben · Fridrik · Morten · Adrian · Fredrik · Emil · Lars · Eivind
 
-## What it is
-- **iOS-only** (Swift / SwiftUI), deep iPhone integration (Widgets, Live Activities, Siri, Apple Intelligence).
-- **Multi-tenant:** any friend group can create a group, invite members, assign **admins**, and customize.
-- **Deeply customizable:** editable **layouts** (SDUI) + **theme tokens** + a **rules/automation engine** — "advanced settings" for power users, friendly editors for everyone.
-- **$0-leaning hosting:** Apple **CloudKit** (one CKShare zone per group) + **Cloudflare R2** for media. Cost stays near-zero because it rides each user's iCloud quota — which is what keeps it **ad-free** as a public app.
-- **Data, not code:** customization is declarative data interpreted by engines in the binary — App Store **2.5.2** safe (and deliberately not the HTML5/JS mini-app route, Guideline 4.7). This also makes it **AI-ready** — see [`docs/AI-READINESS.md`](docs/AI-READINESS.md).
+## How it works, in brief
+- **Local-first:** the group's state lives on each phone and merges conflict-free; the cloud is **transport**. Instant, works offline, you own your history. ([`docs/REALTIME.md`](docs/REALTIME.md))
+- **One model:** layout (*views*), rules (*reactions*), and look (*theme/motion*) are facets of one domain-typed object graph — not three engines. ([`docs/VISION.md`](docs/VISION.md))
+- **AI-native:** reshape your space by *asking*, on-device and private; the AI proposes validated changes you approve. ([`docs/AI-READINESS.md`](docs/AI-READINESS.md))
+- **Native + portable core:** Swift/SwiftUI for speed + deep iPhone integration (App Intents/Siri, Widgets, Foundation Models); the brain is framework-agnostic behind ports, so Android stays possible. ([`docs/TECH-STACK.md`](docs/TECH-STACK.md))
+- **~$0 hosting:** CloudKit + Cloudflare R2 + free serverless cron; only real cost is Apple Developer (~$99/yr). ([`docs/FEASIBILITY.md`](docs/FEASIBILITY.md))
+- **Non-negotiable:** privacy by default, **no ads, ever.**
 
-## Core jobs (ship as the default template)
-Plan hangouts · group chat · run the yearly **Trivselslekene**. These become the default, restylable template every group starts from.
+## Documentation
+**Start here:** [`docs/VISION.md`](docs/VISION.md) → [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) → [`docs/CREATOR.md`](docs/CREATOR.md) → [`docs/FEASIBILITY.md`](docs/FEASIBILITY.md).
+The full, grouped map with reading order is in **[`docs/README.md`](docs/README.md)**. Decisions are logged in [`docs/DECISIONS.md`](docs/DECISIONS.md); honest risks in [`docs/CRITIQUE.md`](docs/CRITIQUE.md). For AI assistants & contributors: [`AGENTS.md`](AGENTS.md).
 
-## Roadmap at a glance (re-cut for the pivot)
-- **Phase 0** — Platform foundations: multi-group data model, **roles & invites**, CloudKit, app scaffold
-- **Phase 1** — Theming + the core loop (chat, events/RSVP, polls, calendar, push) built on theme tokens — **the real launch**
-- **Phase 2** — SDUI **layout engine** + friendly editor (groups change layouts, not just styles)
-- **Phase 3** — **Rules / automation engine** ("advanced settings")
-- **Phase 4** — Public release: UGC moderation (Guideline 1.2) + **template gallery**
-- **Phase 5** — Trivselslekene, gamification, iOS extras, **AI assistance**, money (with care) as editable modules
-
-## Tech stack
-Swift / SwiftUI · Sign in with Apple · CloudKit (CKShare zone per group) + app-level RBAC · CloudKit subscriptions for push · Cloudflare R2 for media · free serverless cron (Workers / Val Town) for scheduled rules · Apple Intelligence / Foundation Models + App Intents (opportunistic). *Cross-platform later: a second renderer over the same documents via Skip, or Firebase Spark.*
-
-## Docs
-- [`docs/PIVOT.md`](docs/PIVOT.md) — **start here:** the pivot plan (scope, new architecture, risks, roadmap, migration)
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — the seven-layer multi-tenant architecture
-- [`docs/SDUI-SPEC.md`](docs/SDUI-SPEC.md) — the customizable layout engine
-- [`docs/RULES-SPEC.md`](docs/RULES-SPEC.md) — the rules / automation engine
-- [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) — how customization stays **slim, fast, smooth** (budgets + rules)
-- [`docs/AI-READINESS.md`](docs/AI-READINESS.md) — design so **AI can help configure/script** the app (on-device first; App Intents/Siri; App Store limits)
-- [`docs/EXECUTION-PLAN.md`](docs/EXECUTION-PLAN.md) — spikes, critical path, Definition of Ready/Done, CI
-- [`docs/DECISIONS.md`](docs/DECISIONS.md) — architecture decision log (the *why*, newest first)
-- [`docs/MVP-and-Roadmap.md`](docs/MVP-and-Roadmap.md) — full roadmap, hosting, risks
-- [`docs/BACKLOG.md`](docs/BACKLOG.md) — feature backlog (seed for Issues)
-- [`DESIGN.md`](DESIGN.md) — design language → now the *default theme*
-- [`docs/brainstorm.md`](docs/brainstorm.md) — original idea dump
+## Approach
+Ruthless focus: **build the spine, ship the heart.** v1 = a beautiful default, fast local-first chat, one ritual, theme/motion customization with live preview, and AI as the friendly on-ramp. Everything else earns its way in. ([`docs/CRITIQUE.md`](docs/CRITIQUE.md) §6)
 
 ## Distribution
-Pivot adds a **public App Store release** (Phase 4) — which brings Guideline 1.2 UGC duties (EULA, report/block, moderation, age-gating). Early phases stay **TestFlight** for our group. Apple Developer Program (~$99/yr) is the main recurring cost.
+**TestFlight** for the crew in early phases; a public release (with the App Store UGC duties) is a later, separate bet. Apple Developer Program (~$99/yr) is the main recurring cost.
