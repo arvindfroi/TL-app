@@ -1,6 +1,6 @@
-# DESIGN.md — design language
+# DESIGN.md — design language (now the *default theme*)
 
-> **Status: DRAFT / not yet defined.** This is a scaffold + a decisions checklist, not the final design language. The full language (colors, type scale, components, motion) gets created in a dedicated design session — a weekly reminder is set until it's done. Until then, build with **Apple system components and default styling**; don't invent bespoke visuals yet.
+> **Status: DRAFT — re-scoped by the pivot (June 2026).** After the customization pivot ([`docs/PIVOT.md`](docs/PIVOT.md)), this is no longer *the* design language — it is the **default theme** every group starts from and can override. Design is now expressed as **theme tokens** (color roles, type scale + variable-font axes, spacing, radii, motion) consumed by the SDUI renderer; see [`docs/SDUI-SPEC.md`](docs/SDUI-SPEC.md) §2 and §6. The dynamic/variable-font idea below lives on as token-level typography. Two things stay enforced by the renderer for *every* theme, custom or not: **accessibility floors** (contrast, Dynamic Type, tap targets, Reduce Motion) and the **non-negotiables** (privacy visible, **no ads ever**). Until the default theme is finalized, build with **Apple system components and default styling**.
 
 ---
 
