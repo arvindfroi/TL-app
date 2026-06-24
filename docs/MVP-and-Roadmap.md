@@ -2,7 +2,9 @@
 
 *Planning document for the TL app. Prepared from the group's brainstorm (Tl app.pdf). Group: "WAD?FC" — Arvind, Ruben, Fridrik, Morten, Adrian, Fredrik, Emil, Lars, Eivind (9 members).*
 
-> **Decision (current):** the app is **iOS-only**. Arvind is the only Android user and is switching to iPhone soon, so we drop skip.dev / Android / the PWA for now. Worst case, a simple website can be added later. This simplifies everything: pure **CloudKit + Cloudflare R2**, no cross-platform backend.
+> ⚠️ **SUPERSEDED IN PART BY THE PIVOT (June 2026).** The *scope* below (one private app for nine friends, TestFlight-only) and the original phase cut have been replaced by the customization pivot. The **hosting, risks, vlog, and feature reasoning remain valid and useful**, but read [`PIVOT.md`](PIVOT.md) first and use its **revised roadmap (§8)** as the authoritative phasing. New scope in one line: a **multi-tenant** app any friend group can adopt, with **admins/invites**, **user-editable layouts + design (SDUI)**, and a **rules/automation engine** — still iOS-only, still ad-free. The three core jobs become the **default template**.
+
+> **Decision (current):** the app is **iOS-only** for now. (Per the pivot, the engines are kept platform-neutral in *data* so Android via **Skip** stays possible later without a format change.) This keeps the stack: **CloudKit + Cloudflare R2**, no cross-platform backend yet.
 
 ---
 
@@ -102,6 +104,8 @@ Revisit **Firebase (Spark, free)** — natively iOS+Android, doesn't pause when 
 
 ## 5. Roadmap
 
+> Superseded by [`PIVOT.md`](PIVOT.md) §8. Kept for historical context.
+
 Loose, hobby-pace phasing. Each phase ships to TestFlight (which also keeps you clear of App Store UGC review — see §6).
 
 ### Phase 0 — Foundations
@@ -129,7 +133,7 @@ A reasonable order: Phase 0–1 first (get it in hands), then 2 and 3 by group e
 
 **Vipps betting.** Norway has a strict state gambling monopoly. Informal betting *between friends* is generally allowed **as long as it isn't run as a business** — no operator taking a cut. ([ICLG Norway 2026](https://iclg.com/practice-areas/gambling-laws-and-regulations/norway/), [Gambling in Norway — Wikipedia](https://en.wikipedia.org/wiki/Gambling_in_Norway)) An app that **holds or routes money, or takes a fee, risks being treated as a commercial gambling operator.** Safe path: **non-monetary points/prediction game**. If you ever attach real money, keep settlement strictly peer-to-peer in Vipps with the app taking nothing, and get advice first. General info, not legal advice.
 
-**App Store UGC rules (Guideline 1.2).** Chat + vlogs = user-generated content, so a *public* release needs terms/EULA, report + block, and content-removal tools. ([Apple guidelines](https://developer.apple.com/app-store/review/guidelines/)) For 9 friends, **stay TestFlight-only** (up to 100 testers) to sidestep this entirely; add report/block/terms only if you ever go public.
+**App Store UGC rules (Guideline 1.2).** Chat + vlogs = user-generated content, so a *public* release needs terms/EULA, report + block, and content-removal tools. ([Apple guidelines](https://developer.apple.com/app-store/review/guidelines/)) For 9 friends, **stay TestFlight-only** (up to 100 testers) to sidestep this entirely; add report/block/terms only if you ever go public. *(Pivot note: the customization pivot makes this a public app, so the Guideline 1.2 work is now in scope — see [`PIVOT.md`](PIVOT.md) §6.)*
 
 **Sync conflicts & offline.** Two people editing the same event, or posting offline — use last-write-wins via CloudKit change tokens, and test airplane mode.
 
@@ -173,6 +177,8 @@ Design decisions:
 
 ## 9. Recommended next steps
 
+> See [`PIVOT.md`](PIVOT.md) §8–9 and [`EXECUTION-PLAN.md`](EXECUTION-PLAN.md) for the current, authoritative next steps. Original list kept below.
+
 1. Register the Apple Developer Program (~$99/yr) — unlocks CloudKit and TestFlight.
 2. Create a CloudKit container + CKShare shared zone for the group; wire up Sign in with Apple.
 3. Create a free Cloudflare account + an R2 bucket (used from Phase 2 for vlog media).
@@ -184,4 +190,4 @@ Design decisions:
 ### Tech stack at a glance
 Swift / SwiftUI (iOS-only) · Sign in with Apple · CloudKit (container + CKShare; free) · CloudKit subscriptions for push · Cloudflare R2 for vlog media (free, zero egress) · free serverless cron (Cloudflare Workers / Val Town) for scheduled jobs · Apple Intelligence / Foundation Models (opportunistic) · Vipps (peer-to-peer only, later) · custom domain + Drive from G Suite legacy. *Cross-platform fallback if ever needed: Firebase (Spark).*
 
-*Sources: [Apple — CloudKit](https://developer.apple.com/icloud/cloudkit/) · [CloudKit subscriptions](https://www.hackingwithswift.com/read/33/8/delivering-notifications-with-cloudkit-push-messages-ckquerysubscription) · [Cloudflare R2 pricing](https://developers.cloudflare.com/r2/pricing/) · [Foundation Models framework](https://developer.apple.com/documentation/FoundationModels) · [iCloud Shared Album API limitation](https://developer.apple.com/forums/thread/717066) · [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) · [Firebase pricing](https://firebase.google.com/pricing) · [ICLG Gambling Norway 2026](https://iclg.com/practice-areas/gambling-laws-and-regulations/norway/) · [Gambling in Norway — Wikipedia](https://en.wikipedia.org/wiki/Gambling_in_Norway)*
+*Sources: [Apple — CloudKit](https://developer.apple.com/icloud/cloudkit/) · [CloudKit subscriptions](https://www.hackingwithswift.com/read/33/8/delivering-notifications-with-cloudkit-push-messages-ckquerysubscription) · [Cloudflare R2 pricing](https://developers.cloudflare.com/r2/pricing/) · [Foundation Models framework](https://developer.apple.com/documentation/FoundationModels) · [iCloud Shared Album API limitation](https://developer.apple.com/forums/thread/717066) · [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) · [Firebase pricing](https://firebase.google.com/pricing) · [ICLG Gambling Norway 2026](https://iclg.com/practice-areas/gambling-laws-and-regulations/norway/) · [Gambling in Norway — Wikipedia](https://en.wikipedia.org/wiki/Gambling_in_Norway)]*
