@@ -29,6 +29,7 @@ Always check these for current reality before acting:
 | Why the architecture is the way it is | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (post-pivot, 7 layers) |
 | The customization engines | [`docs/SDUI-SPEC.md`](docs/SDUI-SPEC.md) (layouts) · [`docs/RULES-SPEC.md`](docs/RULES-SPEC.md) (automation) |
 | How it stays slim/fast/smooth | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) — budgets enforced on every PR |
+| How AI can help configure/script it | [`docs/AI-READINESS.md`](docs/AI-READINESS.md) — schema-as-API, on-device first, App Intents/Siri, review limits |
 | How we build it (readiness, CI, spikes) | [`docs/EXECUTION-PLAN.md`](docs/EXECUTION-PLAN.md) |
 | Why a decision was made | [`docs/DECISIONS.md`](docs/DECISIONS.md) (ADR log) |
 | The original feature ideas | [`docs/brainstorm.md`](docs/brainstorm.md) |
@@ -55,6 +56,7 @@ Always check these for current reality before acting:
     ├── SDUI-SPEC.md        the customizable layout engine (server-driven UI)
     ├── RULES-SPEC.md       the rules / automation engine ("advanced settings")
     ├── PERFORMANCE.md      slim/fast/smooth budgets — a gate on every PR
+    ├── AI-READINESS.md     design so AI can configure/script the app (down the line)
     ├── EXECUTION-PLAN.md   spikes, critical path, Definition of Ready/Done, CI
     ├── DECISIONS.md        architecture decision log (the why)
     ├── MVP-and-Roadmap.md  full plan; scope superseded by PIVOT §8 roadmap
@@ -73,6 +75,7 @@ Seven layers — full version in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md):
 - **Domain data** in **CloudKit**; **media** (vlogs) on **Cloudflare R2** (metadata + expiry in CloudKit).
 - **Customization store:** per-group theme tokens, **layout documents (SDUI)**, and **rule definitions** — versioned, with graceful fallback — in the group zone.
 - **Engines in the binary:** the **SDUI renderer** (data → native SwiftUI) and the **rules evaluator** (declarative automation). **Data is downloaded, never code** (App Store **2.5.2**; not the HTML5/JS mini-app path of 4.7).
+- **AI assistant (down the line):** another **client of the editor's validated API** — proposes documents the engines re-validate; on-device Foundation Models first, external AI opt-in with consent. See [`docs/AI-READINESS.md`](docs/AI-READINESS.md).
 - **Push:** **CloudKit subscriptions** (no server). **Scheduled jobs / scheduled rules:** **free serverless cron** (Workers / Val Town).
 - **Sync is near-real-time (seconds), NOT live co-editing** — also true of layout/rule edits (last-write-wins). **Rule execution is deduplicated** so an automation runs once across all devices.
 - **Going public adds Guideline 1.2 UGC duties** (EULA, report/block, moderation, age-gating) — see §8 and [`docs/PIVOT.md`](docs/PIVOT.md) §6.
@@ -111,6 +114,7 @@ Plus (pivot-era):
 - **Do** keep customization **data, not code.** Layouts and rules are declarative documents interpreted by engines in the binary (App Store **2.5.2**). Never download/execute code; never take the HTML5/JS mini-app route (Guideline **4.7**).
 - **Do** enforce the **zone boundary** and **RBAC** in the data layer. A custom layout or rule must never reach another group's data or escalate privileges. Validate-and-degrade: unknown components/rules fall back, never crash.
 - **Do** plan for **public-release UGC duties** (Guideline **1.2 / 1.2.1**): EULA, in-app **report/block**, moderation, **age-gating**. Admins are first-line moderators.
+- **Do** keep AI **as a client, not an executor** ([`docs/AI-READINESS.md`](docs/AI-READINESS.md)): AI proposes declarative documents that the engines re-validate (2.5.2); prefer **on-device** Foundation Models; any **external AI** needs Guideline **5.1.2(i)** in-app consent + disclosure and never sees another group's data.
 - **Don't** hardcode the nine names (or any single group). Seed WAD?FC through the same create/invite flow every group uses.
 - **Do** keep the app **iOS-only** for now, distributing **TestFlight** in early phases; the **public App Store release is Phase 4** (when UGC tooling lands).
 - **Do** keep vlog media **ephemeral** (expiring) and stored on **R2**, not CloudKit.
@@ -132,6 +136,7 @@ Plus (pivot-era):
 - **Theme tokens** — semantic design variables (color/type/spacing/motion) a group overrides to restyle the whole app.
 - **Tenant / group** — one friend group; the app is multi-tenant (many independent groups).
 - **Template gallery** — share/import a group's theme + layouts + rules as a starting setup (Phase 4).
+- **App Intents** — the framework exposing app actions/content to Siri + Apple Intelligence (the only path as of WWDC 2026); also the AI assistant's internal tool surface. See [`docs/AI-READINESS.md`](docs/AI-READINESS.md).
 - **R2** — Cloudflare's object storage (for media).
 - **BeReal / daily vlog** — the ephemeral daily clip feature.
 

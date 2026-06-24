@@ -3,6 +3,8 @@
 > **Status: design spec (proposed, June 2026).** Defines how groups customize *layouts*, not just colors. Companion to [`PIVOT.md`](PIVOT.md) and [`RULES-SPEC.md`](RULES-SPEC.md). Implementation lands in roadmap Phase 2.
 >
 > **Performance is non-negotiable here:** this engine is the main jank/bloat risk, so it must follow [`PERFORMANCE.md`](PERFORMANCE.md) — documents **compile once into typed Swift** (no JSON on the render hot path), render via granular bindings + lazy collections, and default templates ship precompiled. A customized screen must cost the same as a hardcoded one.
+>
+> **AI-ready:** the layout schema + component registry double as the grounding surface an AI uses to propose layouts — see [`AI-READINESS.md`](AI-READINESS.md). Keep components/props with stable IDs, semantic names, and doc-strings; AI proposals are re-validated by this engine like any document.
 
 ## 1. Goal and the non-negotiable constraint
 

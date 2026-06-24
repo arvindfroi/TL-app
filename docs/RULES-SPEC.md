@@ -3,6 +3,8 @@
 > **Status: design spec (proposed, June 2026).** Defines the programmable "advanced settings" layer. Companion to [`PIVOT.md`](PIVOT.md) and [`SDUI-SPEC.md`](SDUI-SPEC.md). Implementation lands in roadmap Phase 3.
 >
 > **Performance:** evaluation must be invisible per [`PERFORMANCE.md`](PERFORMANCE.md) §4 — off the main thread, indexed by trigger (no linear scans), coalesced/debounced, bounded, and deduplicated so work happens on one device not nine.
+>
+> **AI-ready:** the trigger/condition/action catalog is the grounding surface for AI-authored automations — see [`AI-READINESS.md`](AI-READINESS.md). "AI writes a script" means it emits a **rules document** validated here, never executable code (App Store 2.5.2).
 
 ## 1. Goal and the non-negotiable constraint
 
@@ -73,7 +75,7 @@ Because up to ~all members' devices see the same data change, naive evaluation w
 
 ## 9. Storage and sync
 
-Rule definitions, their enabled state, and an execution/claim log live in the **group's CloudKit zone** (the customization store), syncing to all members and respecting the zone boundary. The log gives admins an audit trail ("this rule fired, did these actions") and powers debugging.
+Rule definitions, their enabled state, and an execution/claim log live in the **group's CloudKit zone** (the customization store), syncing to all members and respecting the zone boundary. The log gives admins an audit trail ("this rule fired, did these actions") and powers debugging — and is what an AI assistant reads to answer "why didn't my rule fire?"
 
 ## 10. The authoring surface (friendly + advanced)
 
