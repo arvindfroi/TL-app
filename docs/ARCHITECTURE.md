@@ -1,51 +1,42 @@
 # Architecture (brief)
 
-> **Revised for the customization pivot (June 2026).** See [`PIVOT.md`](PIVOT.md) for the why; the two engines have full specs in [`SDUI-SPEC.md`](SDUI-SPEC.md) and [`RULES-SPEC.md`](RULES-SPEC.md). This is the orientation summary.
+> **Revised for the local-first direction (June 2026).** See [`VISION.md`](VISION.md) for the *why* (this evolves the earlier [`PIVOT.md`](PIVOT.md)). The two customization engines have specs in [`SDUI-SPEC.md`](SDUI-SPEC.md) (views) and [`RULES-SPEC.md`](RULES-SPEC.md) (reactions); feasibility/cost in [`FEASIBILITY.md`](FEASIBILITY.md). This is the orientation summary.
 
 ## Principles
-- **iOS-only (for now).** Go all-in on Apple's stack; keep the customization engines platform-neutral in *data* so Android (Skip) stays possible later without a format change.
-- **No server to run.** Managed free tiers; tiny serverless functions only where scheduled logic truly needs them.
-- **Multi-tenant by design.** Many independent groups, each with roles and invites. Our crew (WAD?FC) is the first group, created through the same flow everyone uses — **never hardcoded**.
-- **Data, not code.** Customization (layouts + rules) is declarative data interpreted by engines baked into the binary — App Store 2.5.2 safe.
-- **Non-negotiable, every phase:** privacy by default, and **no ads, ever.**
+- **Local-first.** The group's state lives on each device and merges conflict-free; the cloud is **transport**, not the source of truth. Instant + offline by default. ([`REALTIME.md`](REALTIME.md))
+- **One domain-typed model.** Views (layout), reactions (rules), and looks (theme/motion) are facets of one object graph — not three engines, not generic primitives. ([`VISION.md`](VISION.md) Inversion 2)
+- **Data, not code.** All customization (views, reactions, themes, motion) is declarative data interpreted by engines in the binary — App Store 2.5.2 safe. ([`AI-READINESS.md`](AI-READINESS.md))
+- **Multi-tenant, high-trust inside / careful between.** Many groups; warm and simple inside a group, guarded at the edges (imports, any public sharing). ([`VISION.md`](VISION.md) Inversion 4)
+- **iOS now, portable core.** Native Swift/SwiftUI for speed + Apple integration; the brain is framework-agnostic behind ports so Android/longevity stay open. ([`TECH-STACK.md`](TECH-STACK.md))
+- **Non-negotiable, every phase:** privacy by default, **no ads, ever**; and **~$0 hosting**.
 
-## The seven layers
+## The stack, in layers (bottom → top)
 
 | Layer | What | Built on |
 |---|---|---|
 | 1. Identity | One person, many groups | **Sign in with Apple** |
-| 2. Tenancy & access | Each **group** = one shared zone; you participate in every group you're in | **CloudKit CKShare** (the hard security wall) |
-| 3. Roles & permissions | `owner` / `admin` / `member` / `invited`; who can edit layouts, write rules, moderate | App-level **RBAC** records, enforced in the data layer |
-| 4. Domain data | Messages, events, RSVPs, polls, availability, points; media *metadata* | **CloudKit**; media files on **Cloudflare R2** |
-| 5. Customization store | Per-group theme tokens, layout documents, rule definitions (versioned, with fallback) | **CloudKit** (in the group zone) |
-| 6. Engines (in the binary) | **SDUI renderer** (data → native SwiftUI) and **Rules evaluator** (declarative automation) | Swift interpreters; only *data* is downloaded |
-| 7. Experience & integration | Default app, the customization **editor** (friendly + advanced), **template gallery**, **AI assistant** (another client of the editor's validated API), Apple integration | SwiftUI, Widgets, Live Activities, **App Intents/Siri**, on-device Foundation Models |
+| 2. **Local-first store** | The source of truth: an event-sourced / CRDT log on each device; instant, offline, conflict-free merge; snapshots + compaction bound its growth | pure-Swift core + a proven CRDT library |
+| 3. **Transport & blobs** | Moves changes between devices and stores heavy files — **not the brain** | **CloudKit** (sync + push) · **Cloudflare R2** (media/assets, zero egress) |
+| 4. **One object model** | Domain-typed objects (`Event`, `Poll`, `Message`, `Tradition`, `Member`…) with **views**, **reactions**, and **looks** as facets | the core |
+| 5. Engines (in the binary) | **View renderer** (data→native SwiftUI), **reaction evaluator** (automation), **motion** (declarative) — compile-once for speed | Swift interpreters; only *data* is downloaded |
+| 6. Creator + AI | The **Creator** (visual + node + script + console) and the **AI assistant** — both clients of one validated propose→preview→approve edit API | [`CREATOR.md`](CREATOR.md) · [`AI-READINESS.md`](AI-READINESS.md) |
+| 7. Integration | Default app, design import/export (Files), Apple integration | SwiftUI, **App Intents/Siri**, Widgets, on-device Foundation Models |
 
-## Why CloudKit still fits a multi-tenant app
-A user can **participate in many CKShares at once**, so "each group is its own shared zone" scales to many groups per person without a backend. Crucially, CloudKit storage/traffic sits largely in **each user's own iCloud quota**, so per-tenant cost stays near-zero as the number of groups grows — this is what keeps a public, **ad-free** app sustainable. CKShare gives *access* (in/out of a zone); **roles within a group are an app-level concept** (layer 3) because CKShare only models participant read/write, not admin/moderator semantics.
+## The portable core (ports & adapters)
+The brain — model, view compiler, reaction evaluator, validation, catalogs, RBAC/policy — is **pure Swift with no SwiftUI and no CloudKit**. Everything Apple-specific sits behind protocols (`Store`, `SyncEngine`, `BlobStore`, `Push`, `AIProvider`) with adapters (CloudKit, R2, APNs, Foundation Models). Consequence: getting faster = improve an adapter; swapping the backend = one new adapter; **Android via Skip** = reuse the core + a second renderer. ([`TECH-STACK.md`](TECH-STACK.md) §3)
 
-## Components
+## Two trust zones
+- **Inside a group:** ~9 friends who trust each other → light, social permissions, generous undo, minimal machinery. ([`VISION.md`](VISION.md) Inversion 4)
+- **At the edges:** imported design bundles and any cross-group/public sharing are **validated-as-data, reviewed-before-run**, and (if ever public) carry the UGC duties from [`PIVOT.md`](PIVOT.md) §6. A public store can be **third-party** — we needn't run one ([`CREATOR.md`](CREATOR.md) §11).
 
-| Concern | Choice | Why |
-|---|---|---|
-| Identity | **Sign in with Apple** | No passwords stored |
-| Per-group data + access | **CloudKit CKShare zone per group** | Free, zone boundary = security wall, many shares per user |
-| Roles / permissions | **App-level RBAC records** in the group zone | CKShare can't express admin/moderator roles |
-| Push notifications | **CloudKit subscriptions** (CKQuerySubscription) | Free, no server |
-| Media files | **Cloudflare R2** | 10 GB free, zero egress; metadata stays in CloudKit |
-| Scheduled jobs (rules, "who's it", expiry, R2 signing) | **Cloudflare Workers / Val Town** free tier | Free serverless cron |
-| Customization (layouts/themes/rules) | **Declarative documents** in the group zone | Data-not-code (2.5.2); see engine specs |
-| On-device AI (optional) | **Foundation Models framework** | Free, private, on-device; gated to capable devices |
+## Free hosting (≈ $0)
+CloudKit (data/sync/push, rides each user's iCloud quota) + R2 (10 GB, zero egress) + a free serverless cron (scheduled reactions) + Sign in with Apple. Only recurring cost: **Apple Developer ~$99/yr**. The two deferrable edges that can cost a little: crisp always-on presence and a self-run public store — both optional. ([`FEASIBILITY.md`](FEASIBILITY.md))
 
 ## Data-flow notes
-- **Sync is near-real-time (seconds), not live co-editing.** Fine for chat/polls/events and for layout/rule edits (last-write-wins via change tokens; edit-lock hint for active layout editing). True simultaneous co-editing remains out of scope.
-- **Rule execution is deduplicated** so an automation runs once across all members' devices, not per device — via a claim record + idempotent actions (see [`RULES-SPEC.md`](RULES-SPEC.md) §7).
-- **Customization degrades gracefully:** unknown components/rules from a newer app version never crash an older one; every screen has a built-in default layout to fall back to.
-- **Vlogs** stay ephemeral: files in R2, metadata + expiry in CloudKit; steady-state storage stays small.
-- **Backups:** periodic CloudKit export to Drive.
-
-## New obligations from going public (multi-tenant)
-A public release pulls in App Store **Guideline 1.2** (UGC): EULA, in-app **report/block**, moderation/holding of flagged content, and **age-gating (1.2.1)**. Group **admins** are first-line moderators (powers from the RBAC layer); we provide the tooling and a backstop reporting path. Customization must never let a layout/rule cross the zone boundary or escalate privileges — the defenses are the CKShare wall, the sandboxed engines, and validate-and-degrade. See [`PIVOT.md`](PIVOT.md) §6. AI assistance follows the same rule — it proposes documents the engines re-validate, prefers on-device models, and gates external AI behind Guideline 5.1.2(i) consent; see [`AI-READINESS.md`](AI-READINESS.md).
+- **Instant local, near-real-time remote.** Your action applies immediately on-device; CloudKit push propagates to others in ~1–2s. Two lanes: **durable** state (messages/events/polls/points) in the synced log; **ephemeral** signals (typing/presence) over a fast lossy channel, never stored. ([`REALTIME.md`](REALTIME.md))
+- **Reactions are deduplicated** so an automation runs once across all devices, not per device ([`RULES-SPEC.md`](RULES-SPEC.md) §7).
+- **Customization degrades gracefully:** unknown components/reactions from a newer version never crash an older one; every screen has a built-in default ([`SDUI-SPEC.md`](SDUI-SPEC.md) §7).
+- **Performance is a gate** ([`PERFORMANCE.md`](PERFORMANCE.md)): compile-once, lazy render, off-main reactions, motion within a frame budget.
 
 ## Cross-platform fallback (not active)
-If Android is ever needed: build a second **renderer/evaluator over the same documents** (via **Skip**), or fall back to **Firebase (Spark, free)** for a shared backend. Avoid Supabase (free projects pause when idle). Not active while iOS-only.
+Android later = a second renderer/evaluator over the same model + a non-Apple `SyncEngine` adapter (Skip, or Firebase). The CRDT/local-first design makes this far cheaper than a CloudKit-welded app would. Not active while iOS-only.
