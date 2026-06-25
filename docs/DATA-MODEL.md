@@ -32,7 +32,7 @@ State is never written directly; it's the **fold of operations** (§5). The enve
 
 - **IDs: ULID** (or UUIDv7) — generated offline on-device, sortable by creation time, collision-free across devices. No server round-trip to mint an id.
 - **Ordering: Hybrid Logical Clocks (HLC)** — a `(wallClock, counter, deviceId)` triple that gives a total order consistent with causality without trusting device clocks. HLC stamps every operation; ties break by `deviceId`.
-- **Members:** a stable member id per person (derived from Sign in with Apple, mapped once); used as `author` and in permissions.
+- **Members & multi-group:** one **Sign in with Apple** identity per person, used as `author`. A person can belong to **many groups** → one **`Member` record per (person, group)**, carrying a **per-group profile** (display name/avatar that can differ per group). The app holds a **current active group** and renders only that zone; the user **switches groups like switching accounts on Instagram** ([`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) D2). **No data crosses groups** — each group is a private island; only lightweight notification badges may surface across groups.
 
 ## 4. Object types (v1 vocabulary)
 
@@ -75,7 +75,7 @@ Every operation carries its `author`. On apply (locally *and* server-side via Cl
 - **Operations/objects → CloudKit records** in the group's zone (fields: envelope + op-body + HLC + author). CloudKit subscriptions push new ops to members ([`REALTIME.md`](REALTIME.md)).
 - **Blobs** (images, fonts, motion files) → **R2**, addressed by **content hash**; objects hold an `AssetRef` (hash + size + type), never the bytes. Dedup + cache for free.
 - **Optional E2EE:** encrypt op-bodies/blobs client-side so CloudKit/R2 hold ciphertext ([`SECURITY.md`](SECURITY.md) §3).
-- A **thin seam** ([`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) O2): the model knows nothing about CloudKit — it talks to a `Store`/`SyncEngine` protocol; CloudKit is one adapter.
+- A **thin seam** ([`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) D3): the model knows nothing about CloudKit — it talks to a `Store`/`SyncEngine` protocol; CloudKit is one adapter.
 
 ## 9. Schema versioning & migration
 
@@ -117,4 +117,4 @@ Don't build all types at once. The first end-to-end slice is just: **`Group` + `
 ---
 
 ### Related
-[`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) (L2/L3) · [`VISION.md`](VISION.md) (Inversion 2) · [`ARCHITECTURE.md`](ARCHITECTURE.md) · [`SDUI-SPEC.md`](SDUI-SPEC.md) (View) · [`RULES-SPEC.md`](RULES-SPEC.md) (Reaction) · [`REALTIME.md`](REALTIME.md) (sync) · [`SECURITY.md`](SECURITY.md) (permissions, E2EE) · [`EXECUTION-PLAN.md`](EXECUTION-PLAN.md) (the prototype that proves this).
+[`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) (L2/L3, D2/D3) · [`VISION.md`](VISION.md) (Inversion 2) · [`ARCHITECTURE.md`](ARCHITECTURE.md) · [`SDUI-SPEC.md`](SDUI-SPEC.md) (View) · [`RULES-SPEC.md`](RULES-SPEC.md) (Reaction) · [`REALTIME.md`](REALTIME.md) (sync) · [`SECURITY.md`](SECURITY.md) (permissions, E2EE) · [`EXECUTION-PLAN.md`](EXECUTION-PLAN.md) (the prototype that proves this).
