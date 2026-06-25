@@ -24,6 +24,7 @@ This file follows the [AGENTS.md](https://agents.md) convention and is auto-dete
 | **The full doc map + reading order** | **[`docs/README.md`](docs/README.md)** — the index; start here |
 | The vision / current direction | [`docs/VISION.md`](docs/VISION.md) — **north star** |
 | How it's built | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (local-first, one model, ports) |
+| **The data model (foundation)** | [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md) — the one object graph, CRDT/conflict semantics |
 | The make-it-yours experience | [`docs/CREATOR.md`](docs/CREATOR.md) (UI/motion customization, import/export, console) |
 | Free-on-CloudKit/R2 proof | [`docs/FEASIBILITY.md`](docs/FEASIBILITY.md) |
 | The view / reaction specs | [`docs/SDUI-SPEC.md`](docs/SDUI-SPEC.md) (views) · [`docs/RULES-SPEC.md`](docs/RULES-SPEC.md) (reactions) |
@@ -58,6 +59,7 @@ This file follows the [AGENTS.md](https://agents.md) convention and is auto-dete
     ├── README.md          ← the documentation index + reading order
     ├── VISION.md          ⭐ north star: local-first, one model, malleable group OS
     ├── ARCHITECTURE.md    ⭐ how it's built (local-first, one model, ports)
+    ├── DATA-MODEL.md      the one object graph (CRDT/conflict spec) — the foundation
     ├── CREATOR.md         ⭐ the make-it-yours experience (UI/motion, import/export, console)
     ├── FEASIBILITY.md     ⭐ the 3 pillars, free on CloudKit + R2
     ├── DECISIONS.md       architecture decision log (ADRs, newest first)
@@ -81,7 +83,7 @@ When app code is added, the Xcode project / Swift packages live under a top-leve
 
 ## 4. Architecture in one screen
 
-Full version in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md); the *why* in [`docs/VISION.md`](docs/VISION.md):
+Full version in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md); the *why* in [`docs/VISION.md`](docs/VISION.md); the **data model** in [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md):
 
 - **Identity:** Sign in with Apple — one person, many groups.
 - **Local-first store (source of truth):** an event-sourced / CRDT log on each device; instant, offline, conflict-free merge; snapshots + compaction bound its growth.
@@ -132,8 +134,8 @@ Plus:
 
 - **TL / Trivselslederne** — the group / the app ("trivsel" = wellbeing/good vibes). **WAD?FC** — the group's name/logo. **Trivselslekene** — the yearly games event. **Hjemme i Sandnes** — the "who's home" calendar.
 - **Local-first** — each device holds the source-of-truth state; cloud is transport; instant + offline. See [`docs/REALTIME.md`](docs/REALTIME.md).
-- **CRDT** — conflict-free replicated data type: edits from many devices merge automatically.
-- **One object model** — domain-typed objects whose **views/reactions/looks** are facets ([`docs/VISION.md`](docs/VISION.md)).
+- **CRDT** — conflict-free replicated data type: edits from many devices merge automatically. See [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md).
+- **One object model** — domain-typed objects whose **views/reactions/looks** are facets ([`docs/VISION.md`](docs/VISION.md), [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md)).
 - **View** — a layout (the SDUI layer, [`docs/SDUI-SPEC.md`](docs/SDUI-SPEC.md)). **Reaction** — an automation rule (the "command blocks", [`docs/RULES-SPEC.md`](docs/RULES-SPEC.md)). **Look** — theme tokens + declarative motion.
 - **Token / cascade** — semantic design variables that resolve Device → Personal → Group-shared → Default ([`docs/CREATOR.md`](docs/CREATOR.md) §8).
 - **Bundle** — an exportable/importable design (theme + tokens + motion + assets + layout + rules) as a manifest + assets.

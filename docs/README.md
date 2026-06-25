@@ -21,6 +21,7 @@ The full doc set, grouped, with a reading order. **New here? Read the four ⭐ d
 | Doc | What it is |
 |---|---|
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | The layered system, the portable core, free hosting, data flow. **Current.** |
+| [`DATA-MODEL.md`](DATA-MODEL.md) | **The foundation:** the one object graph — envelope, IDs/HLC, per-field CRDT + conflict semantics, op log, storage mapping. Spec this before code. |
 | [`TECH-STACK.md`](TECH-STACK.md) | Swift-only reasoning, portable-core/native-shell, and "why not React/CSS (and how it's still React/CSS-like)". |
 | [`SDUI-SPEC.md`](SDUI-SPEC.md) | The **view** layer: layout documents, component registry, theming, validation/fallback. |
 | [`RULES-SPEC.md`](RULES-SPEC.md) | The **reaction** layer: trigger→condition→action DSL (the "command blocks"), sandbox, dedup. |
