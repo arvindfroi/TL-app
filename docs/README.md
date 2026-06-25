@@ -1,8 +1,8 @@
 # Documentation index
 
-The full doc set, grouped, with a reading order. **New here? Read the four ⭐ docs in order**, then dip into the rest as needed. When docs disagree, **the current direction wins**: [`VISION.md`](VISION.md) + the newest entries in [`DECISIONS.md`](DECISIONS.md).
+The full doc set, grouped, with a reading order. **New here? Read the four ⭐ docs in order**, then dip into the rest as needed. When docs disagree, **the current direction wins**: [`VISION.md`](VISION.md) + the newest entries in [`DECISIONS.md`](DECISIONS.md); on strategic forks, [`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) wins.
 
-> **Where we are (June 2026):** idea / pre-development. The plan has evolved from "a customizable multi-tenant app" ([`PIVOT.md`](PIVOT.md)) to a **local-first, single-model, malleable "group OS"** ([`VISION.md`](VISION.md)). Core target: **Cocoon-Shell-style UI customization + Minecraft-command-block rules + Snapchat-feel chat, free on CloudKit + R2.** No app code yet.
+> **Where we are (June 2026):** idea / pre-development, **no code yet**. The plan has evolved from "a customizable multi-tenant app" ([`PIVOT.md`](PIVOT.md)) to a **local-first, single-model, malleable "group OS"** ([`VISION.md`](VISION.md)). Core target: **Cocoon-Shell-style UI customization + Minecraft-command-block rules + Snapchat-feel chat, free on CloudKit + R2.** Key strategic calls are still **open pending Ruben** — see [`OPEN-DECISIONS.md`](OPEN-DECISIONS.md).
 
 ## ⭐ Start here (reading order)
 1. [`VISION.md`](VISION.md) — the north star: what we're really building and why it's different.
@@ -14,6 +14,7 @@ The full doc set, grouped, with a reading order. **New here? Read the four ⭐ d
 | Doc | What it is |
 |---|---|
 | [`VISION.md`](VISION.md) | The reframe: local-first, one model, AI-native, rituals — the five inversions. **Current.** |
+| [`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) | **The strategic forks** — what's locked (settings-first, one-model-separated, spikes-first) vs open for Ruben (positioning, Android, monetization). Wins on those topics. |
 | [`DECISIONS.md`](DECISIONS.md) | Architecture decision log (ADRs), newest first. The *why*, fast. |
 | [`CRITIQUE.md`](CRITIQUE.md) | Honest red-team: the real risks + how to squeeze the potential. "Build the spine, ship the heart." |
 
@@ -26,7 +27,7 @@ The full doc set, grouped, with a reading order. **New here? Read the four ⭐ d
 | [`SDUI-SPEC.md`](SDUI-SPEC.md) | The **view** layer: layout documents, component registry, theming, validation/fallback. |
 | [`RULES-SPEC.md`](RULES-SPEC.md) | The **reaction** layer: trigger→condition→action DSL (the "command blocks"), sandbox, dedup. |
 | [`REALTIME.md`](REALTIME.md) | Messaging under local-first: instant local, near-real-time sync, durable vs ephemeral lanes. |
-| [`AI-READINESS.md`](AI-READINESS.md) | Schema-as-API; AI as a client of the validated edit loop; App Intents/Siri; on-device first. |
+| [`AI-READINESS.md`](AI-READINESS.md) | Schema-as-API; AI as a *later* client of the validated edit loop; App Intents/Siri; on-device first. |
 | [`PERFORMANCE.md`](PERFORMANCE.md) | Slim/fast/smooth: compile-once, budgets, the fast-&-smooth playbook, a gate on every PR. |
 | [`STABILITY.md`](STABILITY.md) | Crash-resistance + a small binary: safe-mode recovery, resource bounds, assets-stream-from-R2. |
 | [`SECURITY.md`](SECURITY.md) | Cybersecurity prep: threat model, untrusted-import sandbox, E2EE, GDPR/privacy, checklist. |
@@ -41,7 +42,7 @@ The full doc set, grouped, with a reading order. **New here? Read the four ⭐ d
 | Doc | What it is |
 |---|---|
 | [`PRIOR-ART.md`](PRIOR-ART.md) | Systems to learn from (Cocoon, Discord, Minecraft, Notion, Airbnb/Spotify SDUI…) + the lessons. |
-| [`PIVOT.md`](PIVOT.md) | **Historical** — the first pivot (single-group → multi-tenant). Superseded in scope by `VISION.md`; the multi-tenant + data-not-code reasoning still holds. |
+| [`PIVOT.md`](PIVOT.md) | **Historical** — the first pivot (single-group → multi-tenant). Superseded in scope by `VISION.md`; multi-tenant framing is *proposed* pending [`OPEN-DECISIONS.md`](OPEN-DECISIONS.md) O1. |
 | [`MVP-and-Roadmap.md`](MVP-and-Roadmap.md) | **Historical** — original plan. Hosting/risk/vlog detail still useful; roadmap superseded by `VISION.md` §8. |
 | [`brainstorm.md`](brainstorm.md) | The original idea dump. |
 
