@@ -26,7 +26,9 @@ The full doc set, grouped, with a reading order. **New here? Read the four ⭐ d
 | [`RULES-SPEC.md`](RULES-SPEC.md) | The **reaction** layer: trigger→condition→action DSL (the "command blocks"), sandbox, dedup. |
 | [`REALTIME.md`](REALTIME.md) | Messaging under local-first: instant local, near-real-time sync, durable vs ephemeral lanes. |
 | [`AI-READINESS.md`](AI-READINESS.md) | Schema-as-API; AI as a client of the validated edit loop; App Intents/Siri; on-device first. |
-| [`PERFORMANCE.md`](PERFORMANCE.md) | Slim/fast/smooth: compile-once, budgets, a gate on every PR. |
+| [`PERFORMANCE.md`](PERFORMANCE.md) | Slim/fast/smooth: compile-once, budgets, the fast-&-smooth playbook, a gate on every PR. |
+| [`STABILITY.md`](STABILITY.md) | Crash-resistance + a small binary: safe-mode recovery, resource bounds, assets-stream-from-R2. |
+| [`SECURITY.md`](SECURITY.md) | Cybersecurity prep: threat model, untrusted-import sandbox, E2EE, GDPR/privacy, checklist. |
 
 ## Planning
 | Doc | What it is |

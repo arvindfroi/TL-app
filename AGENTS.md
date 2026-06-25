@@ -30,6 +30,8 @@ This file follows the [AGENTS.md](https://agents.md) convention and is auto-dete
 | Real-time chat under local-first | [`docs/REALTIME.md`](docs/REALTIME.md) |
 | Stack reasoning (& "why not React/CSS") | [`docs/TECH-STACK.md`](docs/TECH-STACK.md) |
 | Slim/fast/smooth budgets | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) |
+| Stability + smaller binary | [`docs/STABILITY.md`](docs/STABILITY.md) |
+| Security / threat model | [`docs/SECURITY.md`](docs/SECURITY.md) |
 | AI customization (schema-as-API) | [`docs/AI-READINESS.md`](docs/AI-READINESS.md) |
 | Honest risks + how to maximize | [`docs/CRITIQUE.md`](docs/CRITIQUE.md) |
 | Systems we learn from | [`docs/PRIOR-ART.md`](docs/PRIOR-ART.md) |
@@ -65,7 +67,9 @@ This file follows the [AGENTS.md](https://agents.md) convention and is auto-dete
     ├── RULES-SPEC.md      the REACTION layer (the "command blocks")
     ├── REALTIME.md        messaging under local-first
     ├── AI-READINESS.md    AI as a client of the validated edit loop
-    ├── PERFORMANCE.md     slim/fast/smooth budgets — a gate on every PR
+    ├── PERFORMANCE.md     slim/fast/smooth budgets + playbook — a gate on every PR
+    ├── STABILITY.md       crash-resistance + smaller binary
+    ├── SECURITY.md        cybersecurity prep (threat model + controls)
     ├── EXECUTION-PLAN.md  spikes, critical path, DoR/DoD, CI
     ├── BACKLOG.md         feature backlog (seed for Issues)
     ├── PRIOR-ART.md       systems we learn from
@@ -109,7 +113,7 @@ Backlog items are GitHub Issues with **phase** labels (`phase-0`…`phase-4`, pl
 
 **Standing principles — every feature and PR, forever:**
 
-- **Privacy by default.** Local-first/own-your-data, Sign in with Apple, minimum data, encrypted in transit + at rest, permission checks in the data layer (not just UI). No secrets in the repo.
+- **Privacy by default.** Local-first/own-your-data, Sign in with Apple, minimum data, encrypted in transit + at rest, permission checks in the data layer (not just UI). No secrets in the repo. (See [`docs/SECURITY.md`](docs/SECURITY.md).)
 - **No ads, ever.** No ad SDKs/slots, no ad-tracking, no sponsored content.
 - **Data, not code.** All customization — views, reactions, **themes, motion/animation, imported assets** — is declarative data interpreted by engines in the binary (App Store **2.5.2**). Never download/execute code; never the HTML5/JS webview "mini-app" route (**4.7**). "Bring your own" = bring a **declarative file** (Lottie/Rive, JSON), not a script. (It's React-*like* + CSS-*like*, rendered natively — see [`docs/TECH-STACK.md`](docs/TECH-STACK.md).)
 - **~$0 hosting.** No feature that needs a paid always-on server. CloudKit + R2 + free serverless cron.
@@ -117,7 +121,7 @@ Backlog items are GitHub Issues with **phase** labels (`phase-0`…`phase-4`, pl
 Plus:
 
 - **Do** keep the **portable core** clean: model/engines/validation import no SwiftUI and no CloudKit; Apple specifics live behind ports/adapters.
-- **Do** respect the **two trust zones**: light inside a group; validate-as-data + review-before-run for imported bundles/rules; a custom view/reaction can never reach another group's data or escalate a role; **validate-and-degrade** (unknowns fall back, never crash).
+- **Do** treat **imported bundles as untrusted** — validate-as-data + sandbox + review-before-run; a custom view/reaction can never reach another group's data or escalate a role; **validate-and-degrade** (unknowns fall back, never crash). See [`docs/SECURITY.md`](docs/SECURITY.md) §4.
 - **Do** keep AI **a client, not an executor** ([`docs/AI-READINESS.md`](docs/AI-READINESS.md)): it proposes documents the engines re-validate; **on-device first**; any **external AI** needs Guideline **5.1.2(i)** in-app consent + disclosure and never sees another group's data.
 - **Do** enforce **accessibility floors** (Dynamic Type, contrast, Reduce Motion) and **performance budgets** ([`docs/PERFORMANCE.md`](docs/PERFORMANCE.md)) in the engines — a custom theme/motion can't make the app unusable or janky.
 - **Don't** hardcode the nine names (or any single group) — seed WAD?FC via the normal create/invite flow.

@@ -37,7 +37,7 @@ Net effect: a customized screen and a hardcoded screen have **the same steady-st
 - **Minimal dependencies.** Native SwiftUI + at most a couple of tiny, audited packages (e.g. the variable-font helper). **No JavaScript engine, no heavyweight cross-platform runtime, no analytics/ad SDKs** (also a non-negotiable). Every dependency is a size + startup + risk cost.
 - **Asset discipline:** SF Symbols first; subset variable fonts to the axes/glyphs used; compress and lazy-load images; thumbnails from R2, full media on demand.
 - **Data slimness:** CloudKit **delta sync** via change tokens — fetch only what changed and only what the visible screen binds to; paginate; cache. Layout/rule documents are tiny JSON. Vlogs stay ephemeral so storage doesn't creep.
-- **Build hygiene:** strip unused code/assets, dead-strip symbols, watch app-size regressions in CI.
+- **Build hygiene:** strip unused code/assets, dead-strip symbols, watch app-size regressions in CI. (More in [`STABILITY.md`](STABILITY.md) §2.)
 
 ## 6. Performance budgets (the definition of "done")
 
@@ -58,12 +58,25 @@ Concrete, measurable, enforced. Numbers are targets to validate on the oldest su
 - **Optimistic UI:** local writes apply instantly; CloudKit sync reconciles in the background (last-write-wins). The user never waits on the network to feel a tap land.
 - **Skeletons over spinners** for bound data that's still loading; never block the screen on a fetch.
 
+## 7b. The fast & smooth playbook (concrete iOS/SwiftUI)
+
+**One rule: the main thread is sacred** — it does layout + render only; everything else runs off it. Every frame has ~**8 ms on 120 Hz ProMotion** (16 ms at 60 Hz); exceed it and you drop a frame.
+
+- **Fine-grained observation:** use the `@Observable` macro (iOS 17+), not `ObservableObject`/`@Published`, so only views reading a changed property invalidate — a new message doesn't redraw the screen.
+- **Help diffing:** stable `Identifiable` IDs on rows; cheap value-type views; **avoid `AnyView`** (defeats diffing); don't overuse `GeometryReader`.
+- **Lazy + cheap rows:** `LazyVStack`/`List`, known sizes to skip layout passes, trivial row `body` (no formatting/allocation).
+- **Heavy drawing → GPU:** `.drawingGroup()` / `Canvas`/Metal for intense effects (Trivselslekene, imported motion).
+- **Image pipeline (top scroll-hitch cause):** thumbnails from R2, **downsample to display size off-main** (ImageIO), cache memory+disk; never decode full-res on the main thread.
+- **Instant feel:** local-first writes apply optimistically (never wait on network/disk); cold start shows a **skeleton** while the store hydrates and images decode off-main; cache `DateFormatter`s and memoize derived values.
+- **Concurrency priority:** interaction at `userInitiated`, sync/compaction/rule-eval at `background`, so a sync never competes with a scroll.
+- **Honor** Reduce Motion + Low Power Mode (simpler effects, 60 Hz).
+
 ## 8. Measure methodically (don't guess)
 
 - **Instruments + `os_signpost`** around compile, render, sync, and rule evaluation.
 - **Automated performance tests** (XCTest metrics) for scroll, cold start, and layout-compile time, run in CI against the budgets in §6 — a regression fails the build.
 - **Golden layout/rule documents** (small, large, pathological) used as fixtures for both correctness (snapshot tests) and performance.
-- **Frame-drop / hitch tracking** in TestFlight builds so real-device jank surfaces early.
+- **Frame-drop / hitch tracking** (MetricKit) in TestFlight builds so real-device jank surfaces early.
 
 ## 9. The one-line policy
 
