@@ -1,16 +1,18 @@
-# Trivselslederne (TL) app — WAD?FC
+# TL-appen
+
+> **Working codename.** "TL-appen" is a placeholder while the project moves from a single-group app to a product any friend group can use. A real brand name is still to be decided.
 
 A **local-first, deeply customizable space for a friend group** — less an app you configure, more a clubhouse you and your friends keep making your own. Plan hangouts, chat, and run the yearly **Trivselslekene**.
 
-> **Status: idea / pre-development (June 2026).** No app code yet — this repo is the thinking. Our crew (WAD?FC) is the first group.
+> **Status: idea / pre-development (June 2026).** No app code yet — this repo is the thinking.
 
 ## What it does
 
-- **Plan hangouts** — events, RSVP, polls, and a "who's home in Sandnes" calendar.
+- **Plan hangouts** — events, RSVP, polls, and a "who's home" availability calendar.
 - **Group chat** — one shared space, instant, with read receipts.
-- **Trivselslekene** — our yearly games event: scoring, leaderboard, trophies, history.
+- **Trivselslekene** — the yearly games event: scoring, leaderboard, trophies, history.
 
-Other friend groups can create their own **private, invite-only** group too — it's multi-tenant, but a network of private islands, not a public social platform.
+Any friend group can create their own **private, invite-only** group — it's multi-tenant, but a network of private islands, not a public social platform.
 
 ## How it's built (in brief)
 
@@ -20,12 +22,8 @@ Other friend groups can create their own **private, invite-only** group too — 
 - **~$0 hosting:** CloudKit + Cloudflare R2 + free serverless cron. Only real cost is Apple Developer (~$99/yr).
 - **Non-negotiable:** privacy by default, **no ads, ever.**
 
-## The crew (first group)
-
-Arvind · Ruben · Fridrik · Morten · Adrian · Fredrik · Emil · Lars · Eivind
-
 ## The plan
 
 Everything — vision, locked decisions, architecture, data model, the customization "Creator", cost, roadmap, and risks — is in **[`PLAN.md`](PLAN.md)**. That's the single source of truth; start there.
 
-Older detailed working docs (engine specs, prior-art notes, the original brainstorm, the full decision log) are kept off the repo as an archive for reference. They're superseded — when in doubt, `PLAN.md` wins.
+Older detailed working docs (engine specs, prior-art notes, the original brainstorm, the full decision log) are kept in a local `archive/` folder for reference — not part of this repo. They're superseded; when in doubt, `PLAN.md` wins.
