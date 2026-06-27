@@ -10,13 +10,16 @@ If anything elsewhere disagrees with this file, **this file wins.** The earlier,
 
 ## 1. What we're building
 
-A **local-first, deeply customizable space for a friend group** — less an app you configure, more a clubhouse you and your friends keep making your own. It does three jobs well:
+A **local-first, deeply customizable app for a friend group**. It ships as a usable **base app** — group chat + hangout planning out of the box — but the real point is that **everything in it can be customized and configured**: layout, look, motion, and behavior are all editable data, not hardcoded.
 
-1. **Plan hangouts** — where, when, who, what (events + RSVP + polls + a "who's home" availability calendar).
-2. **Group chat** — one shared space, instant, with read receipts.
-3. **Trivselslekene** — the yearly games event: scoring, leaderboard, trophies, history.
+**The base app (what works on day one):**
 
-It's built for one real friend group first — the design partner — then opened to any group. Any friend group can create their own **private, invite-only** group. It's multi-tenant — but a network of *private islands*, **not** a public social platform. The three core jobs ship as a great default that any group can then reshape.
+1. **Group chat** — one shared space, instant, with read receipts.
+2. **Plan hangouts** — events, RSVP, polls, and a "who's home" availability calendar.
+
+**Everything beyond that is built with the tools, not hardcoded.** A yearly games competition with scoring, a shared savings pot, a prediction game, Secret Santa, a bucket list — these are **not** built-in feature modules. They're things a group assembles and configures with the app's own primitives (objects, views, reactions/automations, points, lists, calendars) and keeps or shares as a template. **The app is the toolkit; the features are what you make with it.**
+
+It's built for one real friend group first — the design partner — then opened to any group. Any friend group can create their own **private, invite-only** group. It's multi-tenant — but a network of *private islands*, **not** a public social platform. The base app ships as a great default that any group can then reshape.
 
 **Total customization is the heart of the product.** People must be able to **import/export** and **write scripts/config** that control how the app looks and feels — essentially everything: layout, assets, fonts, colors, animations/motion, rules, logic, buttons, components, icons, sounds, and more. You change what you want and share it as a portable file; the rest inherits a beautiful default. (App-Store-safe because it's all declarative data, never executed code — see [D4](#2-the-decisions-that-are-locked) and §5.)
 
@@ -105,7 +108,7 @@ When a group can change all of that, that's hundreds of knobs. The Creator tames
 
 **One Workshop, four surfaces:** **Design** (visual builder + token editor), **Logic** (node canvas ↔ script for automations), **Assets** (bring-your-own fonts/images/icons/sounds/motion files, packaged as "kits"), and **Console** (live event log, inspector, a "why did this happen?" trace, simulate/dry-run, validation warnings, preview-as-role/device, time-travel).
 
-**Shared vs personal — the Minecraft mod model.** *Mechanics and content are always shared; look-and-feel is where personal freedom lives.* The group's shared identity (logo, brand color, the Trivselslekene look) is "server-side" and syncs to everyone; your personal skin (your accent, font, density, dark/light, motion) is "client-side" and yours alone. The cascade resolves **Device → Personal → Group-shared → Default**. The group can **lock** specific tokens (e.g. enforce the logo and brand color) while leaving the rest open to personal skinning. A **draft → publish** control gives admins the "push a server update" feel, with one-tap rollback.
+**Shared vs personal — the Minecraft mod model.** *Mechanics and content are always shared; look-and-feel is where personal freedom lives.* The group's shared identity (logo, brand color, the group's signature look) is "server-side" and syncs to everyone; your personal skin (your accent, font, density, dark/light, motion) is "client-side" and yours alone. The cascade resolves **Device → Personal → Group-shared → Default**. The group can **lock** specific tokens (e.g. enforce the logo and brand color) while leaving the rest open to personal skinning. A **draft → publish** control gives admins the "push a server update" feel, with one-tap rollback.
 
 **Motion is data too.** Motion tokens (durations, curves, springs) are edited like color tokens; richer effects are importable declarative animation files (Lottie/Rive-style JSON) — never code, so it stays App-Store-safe and portable, and always honors Reduce Motion + a per-frame cost budget.
 
@@ -133,15 +136,13 @@ Loose, hobby-pace, TestFlight-first. Each phase ships a usable increment.
 
 **Phase 0 — Foundations & de-risking.** Apple Developer Program + CloudKit container; the multi-group data model + roles + invites + Sign in with Apple; app scaffold; R2 bucket reserved. **Run the spikes first** (see §8). *Outcome: a person can create a group, invite a friend, they join — both see an empty themed shell.*
 
-**Phase 1 — MVP core loop + theming (the real launch).** Group chat + read receipts → events + RSVP → polls → "who's home" calendar → push — all built **on top of theme tokens + live preview**, so the default look is already restylable. Plus Creator v1-lite: themes/tokens with live preview, section show/hide/reorder, draft→publish, undo, personal/device overrides, a basic Console log + inspector. *Outcome: the group actually plans hangouts in it.*
+**Phase 1 — The base app + theming (the real launch).** The usable base app: group chat + read receipts → events + RSVP → polls → "who's home" calendar → push — built **on top of the theme-token system**, so its look is already restylable. Plus Creator v1-lite: themes/tokens with live preview, section show/hide/reorder, draft→publish, undo, personal/device overrides, a basic Console log + inspector. *Outcome: a friend group actually uses it day to day — and can already restyle it.*
 
-**Phase 2 — Social & iOS flavor + visual builder.** TL daily vlog/BeReal (ephemeral), wishlists + Secret Santa, the TL bucket list; Home Screen widget, a Live Activity, a Siri shortcut, opportunistic Apple Intelligence (smart replies, summaries) gated to capable devices. Creator: full visual builder (component palette + variants), the Asset Library + kits, preview-as, validation panel. *Outcome: fun to open daily.*
+**Phase 2 — The layout, design & sharing tools.** The full Creator Design surface: the visual builder (component palette + variants), the Asset Library (bring-your-own fonts/images/icons/sounds/motion files) + kits, and **import/export of design bundles**. Plus deep iOS integration that respects the theme/layout (Home Screen widget, Live Activity, Siri shortcut, opportunistic on-device Apple Intelligence). *Outcome: groups reshape layout and look, bring their own assets, and share whole setups as portable bundles.*
 
-**Phase 3 — Trivselslekene & gamification + rules engine.** Points + leaderboard, trophies/achievements/records, the dedicated **Trivselslekene module** (live scoring, history, the player animations). Creator: the node-canvas ↔ script Logic surface, simulate/dry-run, trace, command palette. *Outcome: the app owns the group's signature tradition.*
+**Phase 3 — The logic & automation tools.** The reaction engine + the Logic surface (node-canvas ↔ script, simulate/dry-run, trace, command palette), plus the **generic primitives** groups compose into their own features — points/counters, scoring, lists, schedules, and trigger → condition → action automations. *Outcome: a group can build things like a games-event scoreboard, a shared savings tracker, a prediction game, Secret Santa, or a bucket list themselves — as configuration, with no new app release.*
 
-**Phase 4 — Money (with care).** **TL ferien 2030**: a shared savings goal + tracker + planning board (the app holds no money). **Vipps "TL polymarket"**: launch **points-only / non-monetary first** — Norwegian gambling law means the app must never hold, route, or take a cut of real money.
-
-*Deferred bets layered on later: conversational-AI customization, and any public template sharing.*
+*Deferred bets layered on later: conversational-AI customization (talk the app into being), and public template sharing / a gallery.*
 
 ---
 
@@ -165,7 +166,7 @@ The engines are the only genuinely novel parts; everything else (chat/events/pol
 
 **Performance is a gate, not a phase.** Every PR meets the budgets; customization compiles once and the hot path is plain SwiftUI; a slow feature gets redesigned, not shipped.
 
-**Norwegian gambling law.** Informal betting between friends is fine; an app that holds/routes money or takes a cut risks being treated as a commercial operator. Safe path: points-only; if real money is ever attached, settlement stays strictly peer-to-peer in Vipps with the app taking nothing — and get advice first.
+**Norwegian gambling law (matters because the tools can build a betting/prediction game).** Informal betting between friends is fine; anything that holds/routes money or takes a cut risks being treated as a commercial operator. So the toolkit's automations and actions **never** hold, route, or take a cut of real money — money-like features stay points-only, and any real-money settlement is strictly peer-to-peer (e.g. Vipps) with the app taking nothing. Get advice before enabling anything beyond that.
 
 **Bus factor.** The CKShare zone has one owner; document who owns it and keep periodic exports.
 
@@ -185,7 +186,7 @@ The engines are the only genuinely novel parts; everything else (chat/events/pol
 - **~$0 hosting** — no feature that needs a paid always-on server.
 - **Keep the portable core clean** — model/engines/validation import no SwiftUI and no CloudKit; Apple specifics live behind ports/adapters.
 - **Don't hardcode any group or member names** — every group, including the first, is created via the normal create/invite flow.
-- **Betting** never holds/routes money or takes a cut — points-only first.
+- **No tool or automation may hold, route, or take a cut of real money** — money-like features (a savings pot, a prediction game) are points-only; real-money settlement stays peer-to-peer with the app taking nothing.
 - **Accessibility floors** (Dynamic Type, contrast, Reduce Motion) and **performance budgets** are enforced in the engines, so a custom theme/motion can't make the app unusable or janky.
 
 **Stack at a glance:** Swift / SwiftUI (iOS-only) · Sign in with Apple · local-first CRDT core · CloudKit (sync transport + push) · Cloudflare R2 (media/assets) · free serverless cron (scheduled automations) · on-device Apple Foundation Models (opportunistic) · Vipps (peer-to-peer only, later).
